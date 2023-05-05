@@ -1,0 +1,9 @@
+﻿@inject SignInManager<ApplicationUser> SignInManager
+@{
+    var hasExternalLogins = (await SignInManager.GetExternalAuthenticationSchemesAsync()).Any();
+}
+
+<div class="row text-center py-lg-3 py-1">
+    <div class="col-md-6 col-12 my-lg-0 my-3"><a class="button-primary px-lg-5 py-lg-3 h5" asp-page="./ChangePassword">Password</a></div>
+    <div class="col-md-6 col-12 my-lg-0 my-3"><a class="button-primary px-lg-5 py-lg-3 h5" asp-page="./PersonalData">Personal data</a></div>
+</div>

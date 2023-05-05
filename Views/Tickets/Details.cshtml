@@ -1,0 +1,162 @@
+﻿@model ProjectManager.Models.ViewModels.TicketDetailsViewModel
+
+@{
+    ViewData["Title"] = "Ticket details";
+}
+
+<div class="container">
+    <h1 class="text-center mt-4">Ticket details</h1>
+    <p class="h5 text-center mb-5 fst-italic text-muted">Here you can see <span class="fw-bold text-decoration-underline">information</span> about the ticket, as well as <span class="fw-bold text-decoration-underline">edit</span> it with the right permissions!</p>
+
+    <div class="row justify-content-around">
+        <!-- Ticket details, first content block -->
+        <div class="col-xl-6 mb-xl-0 col-12 mb-3 p-0">
+            <div class="col secondary-bg pb-1">
+
+                @if (Model.CurrentLoggedInUser.Role is Role.ProjectOwner or Role.Administrator)
+                {
+                    <p class="p-0 mb-0 text-end float-end">
+                        <a asp-action="Edit" asp-route-ticketId="@Model.Ticket.Id" asp-route-projectId="@Model.Ticket.ProjectId" class="button-secondary-no-bg">
+                            <i class="bi bi-pencil-square"></i>&nbsp;Edit ticket
+                        </a>
+                    </p>
+                }
+
+                <p class="text-break h5 fw-bold">@Model.Ticket.Name</p>
+
+                <p class="py-0 mb-0 mt-4 fw-bold">Description</p>
+                <p class="text-break mb-1">@Model.Ticket.Description</p>
+                <hr class="p-0 mx-0 my-1" />
+
+                <p class="py-0 mb-0 mt-4 fw-bold">Ticket author</p>
+                <p class="mb-1">
+                    @if (@Model.TicketAuthor is null)
+                    {
+                        <span>Deleted user</span>
+                    }
+                    else
+                    {
+                        @Model.TicketAuthor.FullName <span class="text-muted me-2">(@Model.TicketAuthor.Email)</span> @Model.TicketAuthor.Role
+                    }
+                </p>
+                <hr class="p-0 mx-0 my-1" />
+
+                <p class="py-0 mb-0 mt-4 fw-bold">Parent project</p>
+                <p class="mb-1">@Model.Ticket.Project.Name</p>
+                <hr class="p-0 mx-0 my-1" />
+
+                <p class="py-0 mb-0 mt-4 fw-bold">Creation date</p>
+                <p>@Model.Ticket.CreationDate</p>
+            </div>
+        </div>
+
+        <!-- Ticket severity and status, second content block -->
+        <div class="col-xl-5 col-12 p-0">
+            <div class="row justify-content-around">
+
+                <!-- Ticket status -->
+                <div class="col-xl-12 col-10 secondary-bg mb-3 py-4">
+                    @if ((Model.CurrentLoggedInUser.Role is Role.ProjectOwner or Role.Administrator) || Model.CurrentLoggedInUser.Id == Model.Ticket.AssignedUserId)
+                    {
+                        <p class="text-center fw-bold mb-1 h4">Ticket status</p>
+                        <p class="p-0 m-0 text-success text-center fw-bold">@TempData["TicketStatusChangeSuccess"]</p>
+
+                        <form asp-action="UpdateTicketStatus" class="text-center">
+                            <input asp-for="Ticket.Id" type="hidden">
+                            <input asp-for="Ticket.ProjectId" type="hidden">
+                            <input asp-for="Ticket.AssignedUserId" type="hidden">
+                            <input asp-for="CurrentLoggedInUser.Role" type="hidden">
+                            <input asp-for="CurrentLoggedInUser.Id" type="hidden">
+                            <input asp-for="AssignedUser.Id" type="hidden">
+
+                            <select asp-for="Ticket.Status" asp-items="@Html.GetEnumSelectList<Status>()" class="form-selector w-50 pe-5 py-3 px-3 my-2">
+                            </select>
+                            <span asp-validation-for="Ticket.Status" class="text-danger"></span>
+
+                            <button type="submit" class="button-primary-no-bg text-center ms-3">Save changes</button>
+                        </form>
+                    }
+                    else
+                    {
+                        <p class="text-center fw-bold mb-1 h4">Ticket status</p>
+                        <p class="text-center m-0 p-0 h5">@Html.DisplayFor(model => model.Ticket.Status)</p>
+                    }
+                </div>
+
+                <!-- Ticket severity -->
+                <div class="col-xl-12 col-10 secondary-bg mb-3 py-4">
+                    @if (Model.CurrentLoggedInUser.Role is Role.ProjectOwner or Role.Administrator)
+                    {
+                        <p class="text-center fw-bold mb-1 h4">Ticket severity</p>
+                        <p class="p-0 m-0 text-success text-center fw-bold">@TempData["TicketSeverityChangeSuccess"]</p>
+
+                        <form asp-action="UpdateTicketSeverity" class="text-center">
+                            <input asp-for="Ticket.Id" type="hidden">
+                            <input asp-for="Ticket.ProjectId" type="hidden">
+                            <input asp-for="CurrentLoggedInUser.Role" type="hidden">
+                            <input asp-for="AssignedUser.Id" type="hidden">
+
+                            <select asp-for="@Model.Ticket.Severity" asp-items="@Html.GetEnumSelectList<Severity>()" class="form-selector w-50 pe-5 py-3 px-3 my-2">
+                            </select>
+                            <span asp-validation-for="@Model.Ticket.Severity" class="text-danger"></span>
+
+                            <button type="submit" class="button-primary-no-bg text-center ms-3">Save changes</button>
+                        </form>
+                    }
+                    else
+                    {
+                        <p class="text-center fw-bold mb-1 h4">Ticket severity</p>
+                        <p class="text-center m-0 p-0 h5">@Html.DisplayFor(model => model.Ticket.Severity)</p>
+                    }
+                </div>
+
+                <!-- Assigned user to ticket -->
+                <div class="col-xl-12 col-10 secondary-bg mb-3 py-4">
+                    @if (Model.CurrentLoggedInUser.Role is Role.ProjectOwner or Role.Administrator)
+                    {
+                        <p class="text-center fw-bold mb-1 h4">Assigned user</p>
+                        <p class="p-0 m-0 text-success text-center fw-bold">@TempData["TicketAssignedUserChangeSuccess"]</p>
+
+                        <form asp-action="AssignUserToTicket" class="text-center">
+                            <input asp-for="Ticket.Id" type="hidden">
+                            <input asp-for="Ticket.ProjectId" type="hidden">
+                            <input asp-for="CurrentLoggedInUser.Role" type="hidden">
+                            <input asp-for="AssignedUser.Id" type="hidden">
+
+                            <select asp-for="@Model.Ticket.AssignedUserId" class="form-selector w-75 pe-5 py-3 px-3 my-2">
+                                <option value="@null">Unassigned</option>
+                                @foreach (var item in Model.ProjectUsers)
+                                {
+                                    <option value="@item.Id">@item.FullName ( @item.Email )</option>
+                                }
+                            </select>
+                            <span asp-validation-for="@Model.Ticket.AssignedUserId" class="text-danger"></span>
+
+                            <button type="submit" class="button-primary-no-bg text-center ms-3">Save changes</button>
+                        </form>
+                    }
+                    else
+                    {
+                        <p class="text-center fw-bold mb-1 h4">Assigned to</p>
+                        <p class="text-center m-0 p-0">
+                            @if (Model.AssignedUser == null)
+                            {
+                                <span>No one yet</span>
+                            }
+                            else
+                            {
+                                <span class="h5">
+                                    @Model.AssignedUser.FullName <span class="text-muted me-2">(@Model.AssignedUser.Email)</span> @Model.AssignedUser.Role
+                                </span>
+                            }
+                        </p>
+                    }
+                </div>
+
+                <p class="text-center mt-3"><a class="button-primary-no-bg my-3 mx-4" asp-controller="Projects" asp-action="Details" asp-route-projectId="@Model.Ticket.ProjectId">Go to Project Details</a>
+            </div>
+
+        </div>
+    </div>
+</div>
+</div>

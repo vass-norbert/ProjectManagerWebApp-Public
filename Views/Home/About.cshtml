@@ -1,0 +1,35 @@
+﻿@{
+    ViewData["Title"] = "About";
+}
+
+@if (User.Identity.IsAuthenticated)
+{
+    Layout = "_Layout";
+}
+else
+{
+    Layout = "_LayoutNoSidebar";
+}
+
+<div class="container" style="font-size: 1.2rem;">
+    <div class="col-xl-8 col-lg-10 col-12 mx-auto">
+
+        @if (!User.Identity.IsAuthenticated)
+        {
+            <div class="float-end">
+                <a asp-controller="Home" asp-action="Index" class="button-primary-no-bg"><i class="bi bi-arrow-left"></i> Go back to index page</a>
+            </div>
+        }
+
+        <h1 class="mt-5 mb-0">About the website</h1>
+        <hr class="mt-0" />
+
+        <p align="justify">Üdvözölöm a projekt és ticket-kezelő webalkalmazásomban! Junior fejlesztőként készítettem ezt a web applikációt, hogy bemutassam a készségeimet és tapasztalataimat szoftverfejlesztésében. Ez a projekt az első nagyobb projektem, ami jelentős tanulási lehetőséget jelentett számomra.</p>
+        <p align="justify">Projektek és ticket-ek egyszerű kezelése a fő célja ennek az alkalmazásnak. Bár lehet, hogy a forrás kód nem a legszebb pár helyen, megbízhatóan működik, valamint rendkívüli tapasztalat szerzési lehetőség volt ezt a projektet megtervezni és kiépíteni.</p>
+        <p align="justify">A backend az Asp.Net Core-ral készült az adatbázis meg SQLite-ot használ Entity Framework-el. Felhasználó hitelesítés és kezelés Identity-vel lett megoldva. A frontend-en CSS és Bootstrap került felhasználásra. Azokat a technológiákat használtam, amelyeket leginkább ismerek, és amelyek lehetővé tették számomra egy megbízhatóan működő web applikáció elkészítését.</p>
+        <p align="justify">A platform alapvető funkciókat kínál, mint például projektek és ticket-ek létrehozása és felhasználók kezelése. A felhasználók új projekteket hozhatnak létre, hozzáadhatnak más felhasználókat, feladatokat oszthatnak ki és követhetik előrehaladásukat. A projekteken belül három szerep van - projekt tulajdonos, adminisztrátor és fejlesztő - amelyeket a felhasználókhoz hozzá lehet rendelni a hozzáférési szintjük és felelősségük alapján.</p>
+        <p align="justify">Ezen kívül minden új felszállónak regisztrációnál automatikusan le lesz generálva pár példa projekt, hogy ki lehessen próbálni a webappot azonnal regisztráció után.</p>
+        <p align="justify">Köszönöm, hogy időt szánt az alkalmazásom megtekintésére. Ha kérdése van, vagy szeretné felvenni velem a kapcsolatot, azt megteheti a <strong>vassnorbert22@gmail.com</strong> email címen keresztül!</p>
+
+    </div>
+</div>

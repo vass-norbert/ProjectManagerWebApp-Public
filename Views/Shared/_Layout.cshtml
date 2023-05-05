@@ -1,0 +1,44 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>@ViewData["Title"] - Project Manager</title>
+    <link rel="icon" href="~/customFavicon.png" />
+    <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.3/font/bootstrap-icons.css">
+    <link rel="stylesheet" href="~/ProjectManager.styles.css" asp-append-version="true" />
+    <link rel="stylesheet" href="~/css/site.css" asp-append-version="true" />
+</head>
+<body>
+    <div class="sidebar">
+        <p class="text-center fw-bold mt-2" style="font-size: 1.3rem"><i class="bi bi-code-slash"></i>&nbsp; Project Manager</p>
+        <hr class="my-0 mx-2" />
+        <a asp-controller="Projects" asp-action="Overview"><i class="bi bi-house"></i> &nbsp; Overview</a>
+        <a asp-controller="Projects" asp-action="MyProjects"><i class="bi bi-window"></i> &nbsp; My projects</a>
+        <a asp-controller="Projects" asp-action="AssignedProjects"><i class="bi bi-window-stack"></i> &nbsp; Assigned projects</a>
+        <a asp-controller="Tickets" asp-action="AssignedTickets"><i class="bi bi-ticket"></i> &nbsp; Tickets</a>
+        <hr class="my-0 mx-2" />
+        <a asp-controller="Home" asp-action="About"><i class="bi bi-info-circle"></i> &nbsp; About the website</a>
+        <hr class="my-0 mx-2" />
+        <a asp-area="Identity" asp-page="/Account/Manage/ChangePassword"><i class="bi bi-person-circle"></i> &nbsp; Account</a>
+
+        <form id="logoutForm" class="form-inline" asp-area="Identity" asp-page="/Account/Logout" asp-route-returnUrl="@Url.Action("Index", "Home", new { area = "" })">
+            <button id="logout" type="submit"><i class="bi bi-box-arrow-left"></i> &nbsp; Logout</button>
+        </form>
+
+    </div>
+
+    <div class="content">
+        <div class="container">
+            <main role="main" class="pb-3">
+                @RenderBody()
+            </main>
+        </div>
+    </div>
+    <script src="~/lib/jquery/dist/jquery.min.js"></script>
+    <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="~/js/site.js" asp-append-version="true"></script>
+    @await RenderSectionAsync("Scripts", required: false)
+</body>
+</html>

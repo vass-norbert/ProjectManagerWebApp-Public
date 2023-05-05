@@ -1,0 +1,63 @@
+﻿@page
+@model LoginModel
+
+@{
+    ViewData["Title"] = "Log in";
+    Layout = "_LayoutNoSideBar";
+}
+
+<div class="container">
+
+    <div class="mx-auto col-xxl-4 col-xl-5 col-lg-6 col-md-7 col">
+
+        <div class="login-form" style="margin-top: 10vh;">
+            <form id="account" method="post">
+
+                <p class="h2 text-center">Log in</p>
+                <hr class="mt-0" />
+
+                <div class="mb-3">
+                    <label asp-for="Input.Email" class="form-label">Email</label>
+                    <input asp-for="Input.Email" class="form-input" autocomplete="off" aria-required="true" placeholder="name@example.com" />
+                    <span asp-validation-for="Input.Email" class="text-danger"></span>
+                </div>
+
+                <div class="mb-2">
+                    <label asp-for="Input.Password" class="form-label">Password</label>
+                    <input asp-for="Input.Password" class="form-input" autocomplete="off" aria-required="true" />
+                    <span asp-validation-for="Input.Password" class="text-danger"></span>
+                </div>
+
+                <div>
+                    <label asp-for="Input.RememberMe" class="form-label">
+                        <input class="form-checkbox" asp-for="Input.RememberMe" type="checkbox" />
+                        Remember me
+                    </label>
+                </div>
+
+                <div asp-validation-summary="ModelOnly" class="text-danger" role="alert"></div>
+
+                <hr />
+
+                <p class="text-center mt-4">
+                    <button id="login-submit" type="submit" class="button-primary px-5">Log in</button>
+                </p>
+
+                <p class="text-center">
+                    <a asp-page="./Register" asp-route-returnUrl="@Model.ReturnUrl" class="button-primary-no-bg ps-2">Register a new account</a>
+                </p>
+
+                <hr class="w-75 mx-auto" />
+
+                <p class="text-center mt-5 pb-0 mb-0">
+                    <a asp-controller="Home" asp-action="Index" class="button-primary-no-bg"><i class="bi bi-arrow-left"></i> Go back to index page</a>
+                </p>
+            </form>
+        </div>
+
+    </div>
+</div>
+
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+}

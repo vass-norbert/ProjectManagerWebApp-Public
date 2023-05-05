@@ -1,0 +1,33 @@
+﻿@using ProjectManager.Logic;
+
+@inject DataAccess dataAccess;
+
+@{
+    ViewData["Title"] = "Overview";
+}
+
+<div class="container">
+
+    <h1 class="text-center mt-4 mb-4">Overview</h1>
+
+    <div class="col-10 offset-1 secondary-bg">
+
+        <p class="h3 fw-bold">Welcome! You are currently logged in as,</p>
+        <p class="h5 ps-1">Test User <span class="text-muted">( TestUser@email.com )</span></p>
+
+        <!-- Tickets info -->
+        <p class="h3 fw-bold mt-5">You have <span style="color: var(--accent-secondary-color)">@dataAccess.AssignedActiveTickets()</span> active ticket(s) assigned to you</p>
+        <p class="h5 py-1">
+            <i class="bi bi-thermometer-high h4 pe-1" style="color: orangered;"></i> @dataAccess.AssignedActiveTickets(Severity.High) high severity
+        </p>
+        <p class="h5 py-1">
+            <i class="bi bi-thermometer-half h4 pe-1" style="color: orange;"></i> @dataAccess.AssignedActiveTickets(Severity.Medium) medium severity
+        </p>
+        <p class="h5 py-1">
+            <i class="bi bi-thermometer-low h4 pe-1" style="color: green;"></i> @dataAccess.AssignedActiveTickets(Severity.Low) low severity
+        </p>
+
+
+    </div>
+
+</div>

@@ -1,0 +1,51 @@
+﻿@model ProjectManager.Models.Project
+
+@{
+    ViewData["Title"] = "Edit project";
+}
+
+<div class="container">
+    <h1 class="text-center mt-4">Edit the project</h1>
+    <p class="h5 text-center fst-italic text-muted">Or <span class="fw-bold text-decoration-underline">delete</span> it!</p>
+    <hr class="mb-5" />
+
+    <div class="row justify-content-center">
+        <div class="col-lg-8">
+
+            <form asp-action="Edit">
+                <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+                <input type="hidden" asp-for="Id" />
+                <input type="hidden" asp-for="CreationDate" />
+
+                <div class="mb-3">
+                    <label asp-for="Name" class="form-label"></label>
+                    <input asp-for="Name" class="form-input" type="text" autocomplete="off" />
+                    <span asp-validation-for="Name" class="text-danger"></span>
+                </div>
+
+                <div>
+                    <label asp-for="Description" class="form-label"></label>
+                    <textarea asp-for="Description" class="form-input" type="text" rows="5"></textarea>
+                    <span asp-validation-for="Description" class="text-danger"></span>
+                </div>
+
+                <p class="my-3 ms-3 float-start">
+                    <a class="button-danger-no-bg" asp-action="Delete" asp-route-projectId="@Model.Id">Delete Project</a>
+                </p>
+
+                <p class="text-end">
+                    <a class="button-primary-no-bg my-3 mx-4" asp-action="Details" asp-route-projectId="@Model.Id">Back to Details</a>
+                    <button type="submit" class="button-primary my-3 me-3">Save changes</button>
+                </p>
+            </form>
+
+        </div>
+    </div>
+
+</div>
+
+@section Scripts {
+    @{
+        await Html.RenderPartialAsync("_ValidationScriptsPartial");
+    }
+}

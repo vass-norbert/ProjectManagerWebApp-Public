@@ -1,0 +1,29 @@
+﻿@model IEnumerable<ProjectManager.Models.Project>
+
+@{
+    ViewData["Title"] = "Assigned projects";
+}
+
+<div class="container">
+    <h1 class="text-center mt-4">Assigned Projects</h1>
+    <p class="h5 text-center mb-5 fst-italic text-muted">These are the projects that were <span class="fw-bold text-decoration-underline">assigned</span> to you to work on by others!</p>
+
+    @if (Enumerable.Any(Model))
+    {
+        <div class="container secondary-bg">
+            <hr class="mx-0 mt-0 mb-2" />
+            @foreach (var item in Model)
+            {
+                <p class="p-0 m-0 small text-muted">Created &#64; @Html.DisplayFor(modelItem => item.CreationDate)</p>
+                <p class="p-0 m-0"><a class="project-list-title" asp-action="Details" asp-route-projectId="@item.Id">@Html.DisplayFor(modelItem => item.Name)</a></p>
+                <p class="mb-4 fst-italic project-list-description">@Html.DisplayFor(modelItem => item.Description)</p>
+                <hr class="mx-0 my-2" />
+            }
+        </div>
+    }
+    else
+    {
+        <hr />
+        <p class="text-center h5 pt-5">There doesn't seem to be any right now...</p>
+    }
+</div>

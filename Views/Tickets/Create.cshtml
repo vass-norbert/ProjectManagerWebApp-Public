@@ -1,0 +1,50 @@
+﻿@model ProjectManager.Models.Ticket
+
+@{
+    ViewData["Title"] = "New ticket";
+}
+
+<div class="container">
+    <h1 class="text-center mt-4">Create a new ticket!</h1>
+    <hr class="mb-5" />
+
+    <div class="row justify-content-center">
+        <div class="col-lg-8">
+            <form asp-action="Create">
+                <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+                <input type="hidden" asp-for="ProjectId" />
+                <input type="hidden" asp-for="OwnerId" />
+                <input type="hidden" asp-for="Status" value="@Status.Open" />
+
+                <div class="mb-3">
+                    <label asp-for="Name" class="form-label"></label>
+                    <input asp-for="Name" class="form-input" type="text" maxlength="64" autocomplete="off" />
+                    <span asp-validation-for="Name" class="text-danger"></span>
+                </div>
+
+                <div class="mb-3">
+                    <label asp-for="Description" class="form-label"></label>
+                    <textarea asp-for="Description" class="form-input" type="text" maxlength="500" autocomplete="off" wrap="soft" rows="5"></textarea>
+                    <span asp-validation-for="Description" class="text-danger"></span>
+                </div>
+
+                <div class="col-lg-6 offset-lg-3 col-8 offset-2 secondary-bg px-5 py-4 text-center">
+                    <label asp-for="Severity" class="form-label"></label>
+                    <select asp-for="Severity" class="form-select form-selector" asp-items="Html.GetEnumSelectList<Severity>()"></select>
+                    <span asp-validation-for="Severity" class="text-danger"></span>
+                </div>
+
+                <p class="text-center">
+                    <a class="button-primary-no-bg my-3 mx-4" asp-controller="Projects" asp-action="Details" asp-route-projectId="@Model.ProjectId">Back to details</a>
+                    <button type="submit" class="button-primary my-3 me-3">Create new ticket</button>
+                </p>
+            </form>
+
+        </div>
+    </div>
+</div>
+@section Scripts {
+    @{
+        await Html.RenderPartialAsync("_ValidationScriptsPartial");
+    }
+}

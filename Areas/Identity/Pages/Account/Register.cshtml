@@ -1,0 +1,93 @@
+﻿@page
+@model RegisterModel
+@{
+    ViewData["Title"] = "Register";
+    Layout = "_LayoutNoSideBar";
+}
+
+
+
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+}
+
+<div class="container">
+
+    <div class="row" style="margin-top: 10vh;">
+        <div class="mx-lg-0 ms-lg-auto mx-auto col-xxl-4 col-xl-5 col-lg-6 col-md-7 col-12">
+
+            <div class="login-form">
+                <form id="registerForm" asp-route-returnUrl="@Model.ReturnUrl" method="post">
+
+                    <p class="h2 text-center">Register</p>
+                    <hr class="mt-0" />
+
+                    <div class="mb-3">
+                        <label asp-for="Input.FirstName" class="form-label"></label>
+                        <input asp-for="Input.FirstName" class="form-input" autocomplete="off" aria-required="true" />
+                        <span asp-validation-for="Input.FirstName" class="text-danger"></span>
+                    </div>
+
+                    <div class="mb-3">
+                        <label asp-for="Input.LastName" class="form-label"></label>
+                        <input asp-for="Input.LastName" class="form-input" autocomplete="off" aria-required="true" />
+                        <span asp-validation-for="Input.LastName" class="text-danger"></span>
+                    </div>
+
+                    <div class="mb-3">
+                        <label asp-for="Input.Email" class="form-label">Email</label>
+                        <input asp-for="Input.Email" class="form-input" autocomplete="off" aria-required="true" placeholder="example@email.com" />
+                        <span asp-validation-for="Input.Email" class="text-danger"></span>
+                    </div>
+
+                    <div class="mb-3">
+                        <label asp-for="Input.Password" class="form-label">Password</label>
+                        <input asp-for="Input.Password" class="form-input" autocomplete="off" aria-required="true" />
+                        <span asp-validation-for="Input.Password" class="text-danger"></span>
+                    </div>
+
+                    <div>
+                        <label asp-for="Input.ConfirmPassword" class="form-label">Confirm Password</label>
+                        <input asp-for="Input.ConfirmPassword" class="form-input" autocomplete="off" aria-required="true" />
+                        <span asp-validation-for="Input.ConfirmPassword" class="text-danger"></span>
+                    </div>
+
+                    <div asp-validation-summary="ModelOnly" class="text-danger" role="alert"></div>
+
+                    <p class="text-center mt-4">
+                        <button id="registerSubmit" type="submit" class="button-primary px-5">Register</button>
+                    </p>
+
+                    <p class="text-center">
+                        <a class="button-primary-no-bg" id="login" asp-area="Identity" asp-page="/Account/Login">Log in with an existing account</a>
+                    </p>
+
+                    <hr class="w-75 mx-auto" />
+
+                    <p class="text-center mt-5 pb-0 mb-0">
+                        <a asp-controller="Home" asp-action="Index" class="button-primary-no-bg"><i class="bi bi-arrow-left"></i> Go back to index page</a>
+                    </p>
+                </form>
+
+            </div>
+        </div>
+
+        <div class="col-xl-4 col-lg-5 col-10 mx-lg-0 me-lg-auto mx-auto ps-md-5 pt-5">
+
+            <p class="h3">
+                <i class="bi bi-info-circle"></i> Regisztrációs infó
+            </p>
+
+            <hr class="mt-0"/>
+
+            <p class="h5">
+                Minden új regisztrációval le lesz generálva egy példa <span class="fw-bold">Project</span> és <span class="fw-bold">Ticket</span>ek, valamint a felhasználó hozzá lesz adva egy előre elkészített <span class="fw-bold">Projekt</span>hez.
+            </p>
+
+            <p class="h5">
+                Így nem kell többször regisztrálni a weboldal minden funkciójának kipróbálásához.
+            </p>
+
+        </div>
+    </div>
+</div>

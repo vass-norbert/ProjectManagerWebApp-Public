@@ -1,0 +1,41 @@
+﻿@model ProjectManager.Models.Project
+
+@{
+    ViewData["Title"] = "New project";
+}
+
+<div class="container">
+    <h1 class="text-center mt-4">Create a new project!</h1>
+    <hr class="mb-5" />
+
+    <div class="row justify-content-center">
+        <div class="col-lg-8">
+            <form asp-action="Create">
+                <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+
+                <div class="mb-3">
+                    <label asp-for="Name" class="form-label"></label>
+                    <input asp-for="Name" class="form-input" type="text" autocomplete="off"/>
+                    <span asp-validation-for="Name" class="text-danger"></span>
+                </div>
+
+                <div>
+                    <label asp-for="Description" class="form-label"></label>
+                    <textarea asp-for="Description" class="form-input" type="text" maxlength="500" autocomplete="off" wrap="soft" rows="5"></textarea>
+                    <span asp-validation-for="Description" class="text-danger"></span>
+                </div>
+
+                <p class="text-end">
+                    <a class="button-primary-no-bg my-3 mx-4" asp-action="MyProjects">Back to List</a>
+                    <button type="submit" class="button-primary my-3 me-3">Create new project</button>
+                </p>
+            </form>
+
+        </div>
+    </div>
+</div>
+@section Scripts {
+    @{
+        await Html.RenderPartialAsync("_ValidationScriptsPartial");
+    }
+}

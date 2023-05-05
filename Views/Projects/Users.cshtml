@@ -1,0 +1,83 @@
+﻿@using ProjectManager.Logic;
+
+@inject DataAccess dataAccess;
+
+@model ProjectManager.Models.ViewModels.ProjectUsersViewModel;
+
+@{
+    ViewData["Title"] = "Users";
+}
+
+<div class="container">
+
+    <h1 class="text-center mt-4">Manage users</h1>
+    <p class="h5 text-center fst-italic text-muted">
+        Here you can
+        <span class="fw-bold text-decoration-underline">add</span> and <span class="fw-bold text-decoration-underline">remove</span>
+        users from the selected project, as well as
+        <span class="fw-bold text-decoration-underline">change</span> their <span class="fw-bold text-decoration-underline">roles</span>.
+    <p>
+        <hr />
+
+        <div class="row mt-5">
+            <div class="col-xl-8 offset-xl-2 col-12">
+                <p class="h5 fw-bold text-center">Add new user to project:</p>
+                <p class="h5 text-center">@Model.ProjectName</p>
+
+                <form asp-action="AddUser" class="p-3">
+                    <input type="hidden" asp-for="@Model.ProjectId" />
+                    <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+
+                    <span asp-validation-for="NewUserEmail" class="text-danger">@TempData["EmailError"]</span>
+                    <input asp-for="NewUserEmail" class="form-input" type="email" required autocomplete="off" placeholder="example@email.com" />
+                    <label asp-for="NewUserEmail" class="form-label my-2">Add new user by their email</label>
+
+                    <div class="float-end">
+                        <a asp-action="Details" asp-route-projectId="@Model.ProjectId" class="button-primary-no-bg me-3">Back to users</a>
+                        <button type="submit" class="button-primary my-2">Add new user</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+
+        <div class="row mt-5">
+            <div class="col-xl-8 offset-xl-2 col-12 secondary-bg">
+                <p class="text-center h5 fw-bold mb-5">Current users with access to this project</p>
+
+                <div class="project-user-list-height-overlow" style="max-height:22.8rem;">
+                        @foreach (var item in Model.Users)
+                        {
+                            if (item.Id == dataAccess.GetCurrentUserId() && item.Role is not Role.ProjectOwner)
+                            {
+                            <form asp-action="LeaveProjectFromUsers" class="p-0 m-0 float-end">
+                                <input type="hidden" asp-for="@Model.ProjectId">
+                                <button type="submit" class="button-danger-no-bg">Leave Project</button>
+                            </form>
+                            }
+                            else if (item.Role is not Role.ProjectOwner)
+                            {
+                            <a asp-action="ManageUser" asp-route-projectId="@Model.ProjectId" asp-route-userId="@item.Id" class="button-primary-no-bg float-end p-0 pe-2">Manage user</a>
+                            }
+                            else
+                            {
+                            <p class="float-end px-3"></p>
+                            }
+
+                        <div class="row">
+                            <div class="col-xl-8 col-10">
+                                    @item.FullName <span class="text-muted pe-2">(@item.Email)</span>
+                                <span class="fw-bold">@item.Role</span>
+                            </div>
+                        </div>
+                        <hr class="p-0 my-2" />
+                        }
+                </div>
+            </div>
+        </div>
+</div>
+
+@section Scripts {
+    @{
+        await Html.RenderPartialAsync("_ValidationScriptsPartial");
+    }
+}

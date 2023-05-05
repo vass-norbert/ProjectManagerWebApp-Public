@@ -1,0 +1,167 @@
+﻿@model ProjectManager.Models.ViewModels.ProjectDetailsViewModel
+
+@{
+    ViewData["Title"] = "Project details";
+}
+
+<div class="container">
+    <h1 class="text-center mt-4">Project details</h1>
+    <p class="h5 text-center mb-5 fst-italic text-muted">Here you can see <span class="fw-bold text-decoration-underline">information</span> about the project, like who's working on it, and submitted tickets!</p>
+
+    <div class="row justify-content-around">
+        <!-- Project details, first content block -->
+        <div class="col-xl-6 mb-xl-0 col-12 mb-3 p-0">
+            <div class="col secondary-bg pb-1">
+                @if (Model.CurrentLoggedInUsersRole is Role.ProjectOwner)
+                {
+                    <p class="p-0 mb-0 text-end float-end">
+                        <a asp-action="Edit" asp-route-projectId="@Model.Project.Id" class="button-secondary-no-bg">
+                            <i class="bi bi-pencil-square"></i>&nbsp;Edit project
+                        </a>
+                    </p>
+                }
+
+                <p class="text-break h3 fw-bold">@Model.Project.Name</p>
+                <p class="project-description-height-overflow text-break px-2">@Model.Project.Description</p>
+            </div>
+        </div>
+
+        <!-- Users' details, second content block -->
+        <div class="col-xl-5 col-12 p-0">
+            <div class="col secondary-bg pb-1">
+                @if (Model.CurrentLoggedInUsersRole is Role.ProjectOwner or Role.Administrator)
+                {
+                    <p class="p-0 mb-0 text-end float-end">
+                        <a asp-action="Users" asp-route-projectId="@Model.Project.Id" class="button-secondary-no-bg">
+                            <i class="bi bi-gear"></i>&nbsp;Manage users
+                        </a>
+                    </p>
+                }
+                else
+                {
+                    <form asp-action="LeaveProjectFromDetails" class="p-0 m-0 float-end">
+                        <input type="hidden" asp-for="@Model.Project.Id">
+                        <button type="submit" class="button-danger-no-bg">Leave Project</button>
+                    </form>
+                }
+
+                <p class="h3 fw-bold mb-3 ps-2"><i class="bi bi-people"></i>&nbsp; Users</p>
+
+                <div class="project-user-list-height-overlow">
+                    @foreach (var item in Model.Users)
+                    {
+                        <div class="row p-0 px-1">
+                            <div class="col">
+                                @item.FullName <span class="text-muted">(@item.Email)</span>
+                            </div>
+                            <div class="col-auto">
+                                @item.Role
+                            </div>
+                        </div>
+                        <hr class="p-0 my-2" />
+                    }
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Tickets, third content block -->
+    <div class="row justify-content-center mt-xl-5 mt-3">
+        <div class="col-12 secondary-bg">
+
+            <p class="p-0 m-0 text-end float-end">
+                <a asp-controller="Tickets" asp-action="Create" asp-route-projectId="@Model.Project.Id" class="button-secondary-no-bg">
+                    <i class="bi bi-plus-lg"></i>&nbsp;Create new ticket
+                </a>
+            </p>
+
+            <p class="mb-0">
+                <span class="h3 fw-bold mb-3 ps-2">
+                    <i class="bi bi-ticket-detailed"></i>&nbsp; Tickets
+                </span>
+            </p>
+            <span class="text-muted ps-1">Ordered by: Status > Severity > Name</span>
+
+            @if (Model.Project.Tickets is null || Model.Project.Tickets.Count is 0)
+            {
+                <hr class="my-1" />
+                <p class="text-center fst-italic h5 mb-4 mt-5">There are no tickets currently...</p>
+            }
+            else
+            {
+                foreach (var item in Model.Project.Tickets)
+                {
+                    <hr class="my-1" />
+                    <div class="row">
+
+                        <!-- Title -->
+                        <div class="col-xxl-8 col-lg-6 col-12">
+                            <p class="text-break m-0 p-0 overflow-hidden" style="max-height: 3.5rem;">
+                                <a class="ticket-list-title" asp-controller="Tickets" asp-action="Details" asp-route-ticketId="@item.Id" asp-route-projectId="@Model.Project.Id">@Html.DisplayFor(modelItem => item.Name)</a>
+                            </p>
+                        </div>
+
+                        @if (item.Status is not Status.Closed)
+                        {
+                            <!-- Severity -->
+                            <div class="col text-center pb-1">
+                                <p class="m-0 p-0 fw-bold">
+                                    Severity
+                                </p>
+                                <p class="m-0 p-0">
+                                    <span class="ms-3">@Html.DisplayFor(modelItem => item.Severity)</span>
+
+                                    @if (item.Severity is Severity.Low)
+                                    {
+                                        <span class=""><i class="bi bi-thermometer-low h5" style="color: green;"></i></span>
+                                    }
+                                    else if (item.Severity is Severity.Medium)
+                                    {
+                                        <span class=""><i class="bi bi-thermometer-half h5" style="color: orange;"></i></span>
+                                    }
+                                    else if (item.Severity is Severity.High)
+                                    {
+                                        <span class=""><i class="bi bi-thermometer-high h5" style="color: orangered;"></i></span>
+                                    }
+                                </p>
+                            </div>
+                        }
+
+                        <!-- Status -->
+                        <div class="col text-center">
+                            <p class="m-0 p-0 fw-bold">
+                                Status
+                            </p>
+                            <p class="m-0 p-0">
+                                @Html.DisplayFor(modelItem => item.Status)
+                            </p>
+                        </div>
+
+                        @if (item.Status is not Status.Closed)
+                        {
+                            <!-- Assigned status -->
+                            <div class="col text-center">
+                                <p class="m-0 p-0 fw-bold">
+                                    Assigned
+                                </p>
+                                <p class="m-0 p-0">
+                                    @if (item.AssignedUserId is null)
+                                    {
+                                        <i class="bi bi-slash-circle" style="color: orangered; font-size: 1.2rem;"></i>
+                                    }
+                                    else
+                                    {
+                                        <i class="bi bi-check-circle" style="color: green; font-size: 1.2rem;"></i>
+                                    }
+                                </p>
+                            </div>
+                        }
+
+                    </div>
+                }
+                <hr class="p-0 m-0 my-1" />
+            }
+
+        </div>
+    </div>
+</div>

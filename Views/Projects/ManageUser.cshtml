@@ -1,0 +1,51 @@
+﻿@model ProjectManager.Models.ViewModels.ProjectManageUserViewModel
+
+@{
+    ViewData["Title"] = "Manage user";
+}
+
+<div class="container">
+    <h1 class="text-center mt-4 h2">Change user's role, or delete user from the project</h1>
+
+    <div class="row mt-5">
+        <div class="col-xxl-5 col-xl-6 col-lg-8 col-md-10 col-12 mx-auto px-5 secondary-bg">
+            <p class="fw-bold m-0 pb-1 text-center h5">@Model.projectRole.Project.Name</p>
+            <p class="text-center">@Model.userInfo.FullName <span class="text-muted">(@Model.userInfo.Email)</span></p>
+
+            <form asp-action="UpdateRole" class="text-center">
+                <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+                <input type="hidden" asp-for="projectRole.Id" />
+                <input type="hidden" asp-for="projectRole.UserId" />
+                <input type="hidden" asp-for="projectRole.ProjectId" />
+
+                <select asp-for="projectRole.Role" class="form-selector w-auto pe-5 py-3 px-3 my-3 mx-auto">
+                    <option value="@Role.Developer">Developer</option>
+                    <option value="@Role.Administrator">Administrator</option>
+                </select>
+                <span asp-validation-for="projectRole.Role" class="text-danger"></span>
+
+                <button type="submit" class="button-primary-no-bg text-center ms-3">Save changes</button>
+            </form>
+
+            <hr class="mt-4 mb-5" />
+
+            <form asp-action="DeleteUserFromProject">
+                <input type="hidden" asp-for="projectRole.Id" />
+                <input type="hidden" asp-for="projectRole.UserId" />
+                <input type="hidden" asp-for="projectRole.ProjectId" />
+
+                <p class="text-center"><button type="submit" class="button-danger">Delete user from project</button></p>
+            </form>
+
+            <hr class="mt-5" />
+
+            <a asp-action="Users" asp-route-projectId="@Model.projectRole.ProjectId" class="button-primary-no-bg">Back to users</a>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    @{
+        await Html.RenderPartialAsync("_ValidationScriptsPartial");
+    }
+}

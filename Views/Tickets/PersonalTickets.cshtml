@@ -1,0 +1,95 @@
+﻿@model ICollection<ProjectManager.Models.Ticket>
+
+@{
+    ViewData["Title"] = "Personal tickets";
+}
+
+<div class="container">
+
+    <div class="row mt-5 mb-5 pt-5">
+        <div class="pb-3 col-xl-5 offset-xl-1 col-6 text-center h4 fw-bold border-bottom border-1"><a asp-action="AssignedTickets"> Tickets assigned to you </a></div>
+
+        <div class="pb-3 col-xl-5 col-6 text-center h4 fw-bold border-bottom border-5"> Tickets created by you</div>
+    </div>
+
+    <div class="secondary-bg">
+        @if (Model is null || Model.Count is 0)
+        {
+            <hr class="mt-1" />
+            <p class="text-center fst-italic h5 mb-4 mt-5">There are no tickets currently...</p>
+        }
+        else
+        {
+            foreach (var item in Model)
+            {
+                <hr class="my-1" />
+                <div class="row">
+                    <!-- Title -->
+                    <div class="col-xxl-8 col-lg-6 col-12">
+                        <p class="text-break m-0 p-0 overflow-hidden" style="max-height: 3.5rem;">
+                            <a class="ticket-list-title" asp-controller="Tickets" asp-action="Details" asp-route-ticketId="@item.Id" asp-route-projectId="@item.ProjectId">@Html.DisplayFor(modelItem => item.Name)</a>
+                        </p>
+                    </div>
+
+                    @if (item.Status is not Status.Closed)
+                    {
+                        <!-- Severity -->
+                        <div class="col text-center pb-1">
+                            <p class="m-0 p-0 fw-bold">
+                                Severity
+                            </p>
+                            <p class="m-0 p-0">
+                                <span class="ms-3">@Html.DisplayFor(modelItem => item.Severity)</span>
+
+                                @if (item.Severity is Severity.Low)
+                                {
+                                    <span class=""><i class="bi bi-thermometer-low h5" style="color: green;"></i></span>
+                                }
+                                else if (item.Severity is Severity.Medium)
+                                {
+                                    <span class=""><i class="bi bi-thermometer-half h5" style="color: orange;"></i></span>
+                                }
+                                else if (item.Severity is Severity.High)
+                                {
+                                    <span class=""><i class="bi bi-thermometer-high h5" style="color: orangered;"></i></span>
+                                }
+                            </p>
+                        </div>
+                    }
+
+                    <!-- Status -->
+                    <div class="col text-center">
+                        <p class="m-0 p-0 fw-bold">
+                            Status
+                        </p>
+                        <p class="m-0 p-0">
+                            @Html.DisplayFor(modelItem => item.Status)
+                        </p>
+                    </div>
+
+                    @if (item.Status is not Status.Closed)
+                    {
+                        <!-- Assigned status -->
+                        <div class="col text-center">
+                            <p class="m-0 p-0 fw-bold">
+                                Assigned
+                            </p>
+                            <p class="m-0 p-0">
+                                @if (item.AssignedUserId is null)
+                                {
+                                    <i class="bi bi-slash-circle" style="color: orangered; font-size: 1.2rem;"></i>
+                                }
+                                else
+                                {
+                                    <i class="bi bi-check-circle" style="color: green; font-size: 1.2rem;"></i>
+                                }
+                            </p>
+                        </div>
+                    }
+
+                </div>
+            }
+            <hr class="p-0 m-0 my-1" />
+        }
+    </div>
+</div>
